@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Typing Speed Test</title>
+</head>
+<body>
+   <div class="container">
+    <h1>Typing Speed Test</h1>
+    <p id="passage">{{ passage }}</p>
+    <textarea id="typing-area" placeholder="Start typing here..."></textarea>
+    <p id="wpm-result">Words per Minute: <span id="wpm-display">0</span></p>
+    <button id="retry-button" onclick="retryTest()">Retry</button>
+</div>
+
+<script>
+    let startTime = 0;
+    const typingArea = document.getElementById('typing-area');
+    const wpmDisplay = document.getElementById('wpm-display');
+    const retryButton = document.getElementById('retry-button');
+    const paragraph = document.getElementById('passage').textContent.split(/\s+/);
+
+    typingArea.addEventListener('input', () => {
+        if (startTime === 0) {
+            startTime = new Date().getTime() / 1000;
+        }
+
+        const currentTime = new Date().getTime() / 1000;
+        const timeElapsed = currentTime - startTime;
+
+        if (timeElapsed > 60) {
+            typingArea.disabled = true;
+            retryButton.disabled = false; // Enable the retry button
+            fetch('/calculate_wpm', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: typingArea.value.trim(),
+                    startTime: startTime,
+                    passage: paragraph.join(' ') // Join the paragraph words for accurate comparison on the backend
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                wpmDisplay.textContent = data.wpm; // Update the displayed WPM
+            });
+        }
+    });
+
+    function retryTest() {
+        startTime = 0;
+        typingArea.disabled = false;
+        retryButton.disabled = true; // Disable the retry button again
+        typingArea.value = '';
+        wpmDisplay.textContent = '0'; // Reset the displayed WPM
+    }
+</script>
+
+</body>
+</html>
