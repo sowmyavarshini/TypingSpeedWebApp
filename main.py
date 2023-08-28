@@ -1,5 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for
-import time
+from flask import Flask, render_template, request, jsonify
 import random
 from dotenv import load_dotenv
 import os
@@ -43,9 +42,8 @@ def calculate_wpm(text, start_time, passage):
 def calculate_wpm_endpoint():
     data = request.json
     text = data.get('text', '')
-    start_time = float(data.get('startTime', 0))
     passage = data.get('passage', '')
-    wpm = calculate_wpm(text, start_time, passage)
+    wpm = calculate_wpm(text, passage)
 
     return jsonify({'wpm': int(wpm)})
 
