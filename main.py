@@ -35,6 +35,7 @@ def calculate_wpm(text, start_time, passage):
     for typed_word, passage_word in zip(typed_words, passage_words):
         if typed_word == passage_word:
             correctly_typed_words += 1
+            print(f"Matched word: {typed_word}")
         print(f"Typed Word: {typed_word}, Passage Word: {passage_word}")
 
     time_elapsed = time.time() - start_time
