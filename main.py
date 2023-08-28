@@ -25,7 +25,7 @@ def index():
     return render_template('index.html', passage=passage)
 
 
-def calculate_wpm(text, start_time, passage):
+def calculate_wpm(text, passage):
     typed_words = text.split()
     passage_words = passage.split()
 
