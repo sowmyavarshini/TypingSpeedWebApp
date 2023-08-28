@@ -36,13 +36,6 @@ def calculate_wpm(text, start_time, passage):
         if typed_word == passage_word:
             correctly_typed_words += 1
     wpm = correctly_typed_words
-    # time_elapsed = time.time() - start_time
-    # print(time.time())
-    # print(time_elapsed)
-    # minutes_elapsed = time_elapsed / 60
-    # print(minutes_elapsed)
-    # wpm = (correctly_typed_words / minutes_elapsed) if minutes_elapsed > 0 else 0
-    print(f"Calculated WPM: {wpm}")
     return wpm
 
 
@@ -52,7 +45,6 @@ def calculate_wpm_endpoint():
     text = data.get('text', '')
     start_time = float(data.get('startTime', 0))
     passage = data.get('passage', '')
-    print(f'{text}{start_time}{passage}')
     wpm = calculate_wpm(text, start_time, passage)
 
     return jsonify({'wpm': int(wpm)})
